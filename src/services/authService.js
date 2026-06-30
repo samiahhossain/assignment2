@@ -1,17 +1,9 @@
-/**
- * src/services/authService.js
- *
- * All database operations for authentication.
- * Controllers call these functions; no SQL lives in controllers.
- */
 const bcrypt = require('bcrypt');
 const jwt    = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 const db     = require('../config/db');
 
 const BCRYPT_ROUNDS = 12;
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function signAccessToken(user) {
   return jwt.sign(
@@ -21,15 +13,8 @@ function signAccessToken(user) {
   );
 }
 
-// ─── Public API ───────────────────────────────────────────────────────────────
 
-/**
- * Create a new user account.
- * Returns the created user row (without password_hash).
- * Throws { code, status } on known failures so the controller can respond correctly.
- */
 async function registerUser({ email, password, role, firstName, lastName }) {
-  // Check for duplicate email
   const existing = await db.query('SELECT user_id FROM users WHERE email = ?', [email]);
   if (existing.length > 0) {
     const err = new Error('A user with this email address already exists.');
@@ -50,18 +35,12 @@ async function registerUser({ email, password, role, firstName, lastName }) {
   return { userId, email, role, firstName, lastName };
 }
 
-/**
- * Validate credentials and return a signed JWT.
- * Returns { accessToken, user } on success.
- * Throws { code, status } on failure.
- */
 async function loginUser({ email, password }) {
   const rows = await db.query(
     'SELECT user_id, email, password_hash, role, first_name, last_name, is_active FROM users WHERE email = ?',
     [email]
   );
 
-  // Deliberately generic error — prevents email enumeration
   const GENERIC = new Error('Invalid email or password.');
   GENERIC.code   = 'INVALID_CREDENTIALS';
   GENERIC.status = 401;

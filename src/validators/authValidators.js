@@ -1,10 +1,3 @@
-/**
- * src/validators/authValidators.js
- *
- * express-validator chains for authentication endpoints.
- * Import the named array into a route definition to run validation
- * before the controller. The controller reads errors with validationResult().
- */
 const { body } = require('express-validator');
 
 const registerValidation = [

@@ -1,12 +1,6 @@
-/**
- * src/controllers/appointmentController.js
- *
- * HTTP layer for Endpoints B1 (availability) and B2 (book appointment).
- */
 const { validationResult } = require('express-validator');
 const appointmentService = require('../services/appointmentService');
 
-// ─── GET /api/appointments/availability  (B1) ─────────────────────────────────
 async function getAvailability(req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -42,7 +36,6 @@ async function getAvailability(req, res) {
   }
 }
 
-// ─── POST /api/appointments  (B2) ─────────────────────────────────────────────
 async function bookAppointment(req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

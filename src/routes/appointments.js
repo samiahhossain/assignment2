@@ -1,9 +1,4 @@
-/**
- * src/routes/appointments.js
- *
- * Mounts appointment endpoints under /api/appointments
- * authenticate must run before authorize on every protected route.
- */
+
 const express      = require('express');
 const authenticate = require('../middleware/authenticate');
 const authorize    = require('../middleware/authorize');
@@ -12,8 +7,6 @@ const { getAvailability, bookAppointment } = require('../controllers/appointment
 
 const router = express.Router();
 
-// GET /api/appointments/availability  —  B1
-// All authenticated roles may query availability
 router.get(
   '/availability',
   authenticate,
@@ -22,8 +15,6 @@ router.get(
   getAvailability
 );
 
-// POST /api/appointments  —  B2
-// Patients book for themselves; admin assistants book on behalf of patients
 router.post(
   '/',
   authenticate,

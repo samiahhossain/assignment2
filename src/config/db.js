@@ -1,7 +1,3 @@
-/**
- * src/config/db.js
- * MySQL connection pool using mysql2/promise.
- */
 const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({

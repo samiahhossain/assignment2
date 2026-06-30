@@ -1,10 +1,3 @@
-/**
- * src/middleware/authenticate.js
- *
- * Verifies the JWT in the Authorization: Bearer <token> header.
- * On success, attaches { userId, role, email } to req.user.
- * On failure, responds 401 before the route handler runs.
- */
 const jwt = require('jsonwebtoken');
 
 function authenticate(req, res, next) {
@@ -18,7 +11,7 @@ function authenticate(req, res, next) {
     });
   }
 
-  const token = authHeader.slice(7); // strip "Bearer "
+  const token = authHeader.slice(7); 
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

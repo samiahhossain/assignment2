@@ -1,11 +1,5 @@
-/**
- * src/validators/appointmentValidators.js
- *
- * express-validator chains for Endpoints B1 and B2.
- */
 const { query, body } = require('express-validator');
 
-// B1 — GET /api/appointments/availability
 const availabilityValidation = [
   query('clinicianId')
     .notEmpty().withMessage('clinicianId is required.'),
@@ -21,7 +15,6 @@ const availabilityValidation = [
       if (req.query.startDate && endDate < req.query.startDate) {
         throw new Error('endDate must not be earlier than startDate.');
       }
-      // Enforce max 31-day window to keep queries performant
       const start = new Date(req.query.startDate);
       const end   = new Date(endDate);
       const diffDays = (end - start) / (1000 * 60 * 60 * 24);
@@ -37,7 +30,6 @@ const availabilityValidation = [
     .withMessage('duration must be an integer between 5 and 120 minutes.'),
 ];
 
-// B2 — POST /api/appointments
 const bookAppointmentValidation = [
   body('patientId')
     .notEmpty().withMessage('patientId is required.'),

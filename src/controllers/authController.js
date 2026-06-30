@@ -1,15 +1,7 @@
-/**
- * src/controllers/authController.js
- *
- * Handles HTTP layer for SEC-1 (register) and SEC-2 (login).
- * Reads validation errors, delegates to authService, and formats responses.
- */
 const { validationResult } = require('express-validator');
 const authService = require('../services/authService');
 
-// ─── POST /api/auth/register  (SEC-1) ─────────────────────────────────────────
 async function register(req, res) {
-  // Return all field-level validation errors at once
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({
@@ -44,7 +36,6 @@ async function register(req, res) {
   }
 }
 
-// ─── POST /api/auth/login  (SEC-2) ────────────────────────────────────────────
 async function login(req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
