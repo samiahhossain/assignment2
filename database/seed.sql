@@ -1,12 +1,5 @@
--- =============================================================================
--- railway Seed Data
--- MySQL 8.0+
--- Run AFTER schema.sql
--- =============================================================================
-
 USE railway;
 
--- Clear existing seed data (safe for development resets)
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE appointment_reminders;
 TRUNCATE TABLE appointments;
@@ -18,43 +11,35 @@ TRUNCATE TABLE refresh_tokens;
 TRUNCATE TABLE users;
 SET FOREIGN_KEY_CHECKS = 1;
 
--- =============================================================================
--- USERS
--- Passwords are bcrypt hashes of the plaintext shown in the comment.
--- Work factor 12.  Use these credentials in Postman.
--- =============================================================================
-
 -- password: Clinician1!
 INSERT INTO users VALUES (
   'USR-001', 'dr.osei@intellicare.ca',
-  '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMVBESvhgKW5tJk3NzL1qGM/3y',
+  '$2b$12$9raRPbs0v0IT12mmhvw9cOYROlGoE2.gMjEEiL5IkFwRx0SDO5zES',
   'clinician', 'Amara', 'Osei', 1, NOW(), NOW()
 );
 
 -- password: Admin1234!
 INSERT INTO users VALUES (
   'USR-002', 'admin@intellicare.ca',
-  '$2b$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uBfDTTVj0.',
+  '$2b$12$DQUCZKsKWHZ2ElqybWqtDeVjHeitHoazOOLdNP8JyqlLzRLf782zy',
   'admin_assistant', 'Priya', 'Nair', 1, NOW(), NOW()
 );
 
 -- password: Patient99!
 INSERT INTO users VALUES (
   'USR-003', 'jane.doe@email.com',
-  '$2b$12$q6vH4.WbOmFNKtCJmWNz8O.9yBGIW8KKTiqlASjGR3P1LQHwBfXhi',
+  '$2b$12$9I4wWxICjoAXq/.66tm/RO58gvNZc1LxcgZJiOeoY5aoA/VsEwTVK',
   'patient', 'Jane', 'Doe', 1, NOW(), NOW()
 );
 
 -- password: Patient99!
 INSERT INTO users VALUES (
   'USR-004', 'bob.smith@email.com',
-  '$2b$12$q6vH4.WbOmFNKtCJmWNz8O.9yBGIW8KKTiqlASjGR3P1LQHwBfXhi',
+  '$2b$12$9I4wWxICjoAXq/.66tm/RO58gvNZc1LxcgZJiOeoY5aoA/VsEwTVK',
   'patient', 'Bob', 'Smith', 1, NOW(), NOW()
 );
 
--- =============================================================================
--- PATIENTS
--- =============================================================================
+
 INSERT INTO patients VALUES (
   'PAT-0001', 'USR-003',
   'Jane', 'Doe', '1985-04-12', '1234-567-890-AB',
@@ -69,16 +54,12 @@ INSERT INTO patients VALUES (
   1, NOW(), NOW()
 );
 
--- =============================================================================
--- PATIENT ADDRESSES
--- =============================================================================
+
 INSERT INTO patient_addresses VALUES
   ('ADDR-001', 'PAT-0001', '123 Maple St', 'Halifax',    'NS', 'B3H 1A1', 1),
   ('ADDR-002', 'PAT-0002', '456 Oak Ave',  'Dartmouth',  'NS', 'B2W 3P1', 1);
 
--- =============================================================================
--- PRESCRIPTIONS
--- =============================================================================
+
 INSERT INTO prescriptions VALUES (
   'RX-001', 'PAT-0001', 'USR-001', NULL,
   'Metformin', '500mg', 'twice daily', 'oral', 90, NOW()
@@ -92,10 +73,6 @@ INSERT INTO prescriptions VALUES (
   'Atorvastatin', '20mg', 'once daily at bedtime', 'oral', 90, NOW()
 );
 
--- =============================================================================
--- AVAILABILITY SLOTS  (Dr. Osei — week of 2026-07-01)
--- Generates 9 slots per day for Mon–Fri (09:00–12:00)
--- =============================================================================
 INSERT INTO availability_slots (slot_id, clinician_id, slot_date, start_time, end_time, is_booked) VALUES
   ('SLOT-0001','USR-001','2026-07-01','09:00','09:20',0),
   ('SLOT-0002','USR-001','2026-07-01','09:20','09:40',0),

@@ -1,19 +1,9 @@
--- =============================================================================
--- railway Database Schema
--- MySQL 8.0+
--- Run this file first, then seed.sql
--- =============================================================================
-
 CREATE DATABASE IF NOT EXISTS railway
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
 USE railway;
 
--- =============================================================================
--- USERS
--- Stores all authenticated principals: clinicians, admin assistants, patients
--- =============================================================================
 CREATE TABLE IF NOT EXISTS users (
   user_id        VARCHAR(36)  NOT NULL,
   email          VARCHAR(255) NOT NULL,
@@ -28,10 +18,7 @@ CREATE TABLE IF NOT EXISTS users (
   UNIQUE KEY uq_users_email (email)
 ) ENGINE=InnoDB;
 
--- =============================================================================
--- PATIENTS
--- Demographic record linked to the user account when role='patient'
--- =============================================================================
+
 CREATE TABLE IF NOT EXISTS patients (
   patient_id          VARCHAR(36)  NOT NULL,
   user_id             VARCHAR(36)  NOT NULL,
@@ -50,10 +37,7 @@ CREATE TABLE IF NOT EXISTS patients (
   CONSTRAINT fk_patients_user FOREIGN KEY (user_id) REFERENCES users (user_id)
 ) ENGINE=InnoDB;
 
--- =============================================================================
--- PATIENT ADDRESSES
--- Separate table so multiple addresses can be stored per patient
--- =============================================================================
+
 CREATE TABLE IF NOT EXISTS patient_addresses (
   address_id   VARCHAR(36)  NOT NULL,
   patient_id   VARCHAR(36)  NOT NULL,
@@ -66,10 +50,7 @@ CREATE TABLE IF NOT EXISTS patient_addresses (
   CONSTRAINT fk_addresses_patient FOREIGN KEY (patient_id) REFERENCES patients (patient_id)
 ) ENGINE=InnoDB;
 
--- =============================================================================
--- AVAILABILITY SLOTS
--- Each row represents one 20-minute block in a clinician's schedule
--- =============================================================================
+
 CREATE TABLE IF NOT EXISTS availability_slots (
   slot_id        VARCHAR(36) NOT NULL,
   clinician_id   VARCHAR(36) NOT NULL,
@@ -83,9 +64,6 @@ CREATE TABLE IF NOT EXISTS availability_slots (
   CONSTRAINT fk_slots_clinician FOREIGN KEY (clinician_id) REFERENCES users (user_id)
 ) ENGINE=InnoDB;
 
--- =============================================================================
--- APPOINTMENTS
--- =============================================================================
 CREATE TABLE IF NOT EXISTS appointments (
   appointment_id    VARCHAR(36)  NOT NULL,
   patient_id        VARCHAR(36)  NOT NULL,
@@ -105,9 +83,7 @@ CREATE TABLE IF NOT EXISTS appointments (
   CONSTRAINT fk_appt_slot      FOREIGN KEY (slot_id)      REFERENCES availability_slots (slot_id)
 ) ENGINE=InnoDB;
 
--- =============================================================================
--- APPOINTMENT REMINDERS
--- =============================================================================
+
 CREATE TABLE IF NOT EXISTS appointment_reminders (
   reminder_id     VARCHAR(36) NOT NULL,
   appointment_id  VARCHAR(36) NOT NULL,
@@ -118,9 +94,7 @@ CREATE TABLE IF NOT EXISTS appointment_reminders (
   CONSTRAINT fk_reminders_appt FOREIGN KEY (appointment_id) REFERENCES appointments (appointment_id)
 ) ENGINE=InnoDB;
 
--- =============================================================================
--- PRESCRIPTIONS
--- =============================================================================
+
 CREATE TABLE IF NOT EXISTS prescriptions (
   prescription_id  VARCHAR(36)  NOT NULL,
   patient_id       VARCHAR(36)  NOT NULL,
@@ -138,9 +112,7 @@ CREATE TABLE IF NOT EXISTS prescriptions (
   CONSTRAINT fk_rx_appt      FOREIGN KEY (appointment_id)  REFERENCES appointments   (appointment_id)
 ) ENGINE=InnoDB;
 
--- =============================================================================
--- REFRESH TOKENS  (JWT revocation tracking)
--- =============================================================================
+
 CREATE TABLE IF NOT EXISTS refresh_tokens (
   token_id           VARCHAR(36)  NOT NULL,
   user_id            VARCHAR(36)  NOT NULL,
